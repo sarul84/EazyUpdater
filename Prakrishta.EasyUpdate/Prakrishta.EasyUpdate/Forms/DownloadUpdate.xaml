@@ -1,0 +1,35 @@
+﻿<Window x:Class="Prakrishta.EasyUpdate.DownloadUpdate"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Prakrishta.EasyUpdate"
+        mc:Ignorable="d" Icon="/Prakrishta.EasyUpdate;component/Images/update.png"
+        Loaded="Window_Loaded" Closing="Window_Closing"
+        Title="Software Update" Height="129" Width="429" ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen">
+    <Border BorderThickness="1" BorderBrush="Black">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="70*" />
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Grid.Row="0" Source="/Prakrishta.EasyUpdate;component/Images/download-1.jpg" Width="80" />
+            <StackPanel Grid.Column="1" Grid.Row="0" Margin="0,15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="lblDownloadSpeedMessage" Text="Downloading update..." Grid.Column="0" Grid.Row="0" />
+                    <TextBlock x:Name="lblSize" Grid.Column="1" Text="112 Kb / 50 MB" Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,10,0" />
+                    <ProgressBar x:Name="pgbFileDownloadProgress" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="25" Margin="0,21,10,-21" />
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
