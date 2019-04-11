@@ -158,7 +158,7 @@ namespace Prakrishta.EasyUpdate
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            this._eazyUpdate.IsRunning = false;
+            this._eazyUpdate.IsUpdaterRunning = false;
         }
 
         private void UseLatestIE()

@@ -327,11 +327,8 @@ namespace Prakrishta.EasyUpdate
                     }
                     else
                     {
-                        //if (AutoUpdater.ReportErrors)
-                        {
-                            MessageBox.Show(ResourceEnabler.GetResourceText("UnsupportedHashAlgorithmMessage"),
-                                ResourceEnabler.GetResourceText("UnsupportedHashAlgorithmCaption"), MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                        MessageBox.Show(ResourceEnabler.GetResourceText("UnsupportedHashAlgorithmMessage"),
+                               ResourceEnabler.GetResourceText("UnsupportedHashAlgorithmCaption"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
 
                     return false;

@@ -112,7 +112,7 @@ namespace Prakrishta.EasyUpdate
         /// <summary>
         /// Gets or sets if the updater is running or not
         /// </summary>
-        internal bool IsRunning { get; set; }
+        internal bool IsUpdaterRunning { get; set; }
 
         /// <summary>
         /// Gets or sets Remind later time span
@@ -139,9 +139,9 @@ namespace Prakrishta.EasyUpdate
             this.AppcastUrl = appcastUrl;
             this.UpdaterOptions = updaterOptions;
 
-            if(this.IsRunning && this._remindLaterTimer == null)
+            if (this.IsUpdaterRunning && this._remindLaterTimer == null)
             {
-                this.IsRunning = true;
+                this.IsUpdaterRunning = true;
 
                 this.IsWinFormsApplication = System.Windows.Forms.Application.MessageLoop;
                 ResourceEnabler.SetLanguageDictionary();
@@ -151,10 +151,10 @@ namespace Prakrishta.EasyUpdate
             {
                 this.UpdaterInformation = await this.GetUpdateDetilsFromAppCast();
             }
-            else if(string.IsNullOrEmpty(this.AppcastUrl) && CheckForUpdateInformation != null)
+            else if (string.IsNullOrEmpty(this.AppcastUrl) && CheckForUpdateInformation != null)
             {
                 #region |Invoke custom implementation|
-                var updateArg = new UpdateEventArgs{ Options = this.UpdaterOptions };
+                var updateArg = new UpdateEventArgs { Options = this.UpdaterOptions };
                 CheckForUpdateInformation?.Invoke(this, updateArg);
                 this.UpdaterInformation = updateArg.UpdateInfo;
                 this.UpdaterOptions = updateArg.Options ?? new EazyUpdaterOptions();
@@ -169,7 +169,7 @@ namespace Prakrishta.EasyUpdate
             this.GetAssemblyInformation(assembly ?? Assembly.GetEntryAssembly());
             var updateTask = this.RunApplicationUpdate();
             updateTask.Wait();
-            this.IsRunning = false;
+            this.IsUpdaterRunning = false;
         }
 
         /// <inheritdoc />
@@ -206,19 +206,19 @@ namespace Prakrishta.EasyUpdate
         /// <returns>Empty Task object that can be awaited</returns>
         private Task RunApplicationUpdate()
         {
-            if(this.UpdaterInformation.CurrentVersion == null 
+            if (this.UpdaterInformation.CurrentVersion == null
                 || string.IsNullOrEmpty(this.UpdaterInformation.DownloadURL))
             {
-                this.IsRunning = false;
+                this.IsUpdaterRunning = false;
                 throw new InvalidDataException();
             }
 
-            if(!this.UpdaterInformation.IsMandatoryUpdate)
+            if (!this.UpdaterInformation.IsMandatoryUpdate)
             {
-                var registryValues = this.EazyUpdateReadWriter.GetRegistryValues(this.RegistryLocation, 
+                var registryValues = this.EazyUpdateReadWriter.GetRegistryValues(this.RegistryLocation,
                     new Collection<string> { RegistryKeys.Skip, RegistryKeys.Version, RegistryKeys.RemindLater });
 
-                if(registryValues?.Any() == true)
+                if (registryValues?.Any() == true)
                 {
                     if (registryValues[RegistryKeys.Skip] != null && registryValues[RegistryKeys.Version] != null)
                     {
@@ -256,25 +256,25 @@ namespace Prakrishta.EasyUpdate
                             return null;
                         }
                     }
-                }                
+                }
             }
 
-            if(this.CustomNotification != null)
+            if (this.CustomNotification != null)
             {
                 this.CustomNotification?.Invoke(this, new NotificationEventArgs(this.UpdaterInformation));
             }
             else
             {
-                if(this.UpdaterInformation != null)
+                if (this.UpdaterInformation != null)
                 {
-                    if(this.UpdaterInformation.IsUpdateAvailable)
+                    if (this.UpdaterInformation.IsUpdateAvailable)
                     {
                         if (!this.IsWinFormsApplication)
                         {
                             System.Windows.Forms.Application.EnableVisualStyles();
                         }
 
-                        if(this.UpdaterInformation.IsMandatoryUpdate 
+                        if (this.UpdaterInformation.IsMandatoryUpdate
                             && this.UpdaterInformation.UpdateMode == EazyUpdateMode.ForcedDownload)
                         {
                             this.DownloadUpdate();
@@ -313,7 +313,7 @@ namespace Prakrishta.EasyUpdate
                 }
             }
 
-            this.IsRunning = false;
+            this.IsUpdaterRunning = false;
             return null;
         }
 
@@ -443,7 +443,7 @@ namespace Prakrishta.EasyUpdate
         /// <returns></returns>
         private async Task<UpdaterInformation> GetUpdateDetilsFromAppCast(CancellationToken token = default(CancellationToken))
         {
-            if(token.IsCancellationRequested)
+            if (token.IsCancellationRequested)
             {
                 throw new TaskCanceledException();
             }
@@ -472,7 +472,7 @@ namespace Prakrishta.EasyUpdate
 
             using (Stream appCastStream = webResponse?.GetResponseStream())
             {
-                if(token.IsCancellationRequested)
+                if (token.IsCancellationRequested)
                 {
                     webResponse?.Close();
                     throw new TaskCanceledException();
@@ -576,7 +576,7 @@ namespace Prakrishta.EasyUpdate
             }
             catch (NotSupportedException) { }
 
-            if (this.UpdaterInformation?.IsMandatoryUpdate == true 
+            if (this.UpdaterInformation?.IsMandatoryUpdate == true
                 && _remindLaterTimer != null)
             {
                 _remindLaterTimer.Stop();
