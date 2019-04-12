@@ -183,6 +183,7 @@ namespace Prakrishta.EasyUpdate
                 processStartInfo = new ProcessStartInfo
                 {
                     FileName = "msiexec",
+                    UseShellExecute = false,
                     Arguments = $"/i \"{tempPath}\""
                 };
             }
