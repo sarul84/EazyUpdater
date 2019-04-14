@@ -61,7 +61,7 @@ namespace Prakrishta.EasyUpdate
         /// <param name="updateReadWriter">Eazy update read writer object</param>
         public EazyUpdateManager(IEazyUpdateReadWriter updateReadWriter)
         {
-            this.EazyUpdateReadWriter = updateReadWriter;
+            this.EazyUpdateReadWriter = updateReadWriter;            
         }
         #endregion
 
@@ -139,11 +139,12 @@ namespace Prakrishta.EasyUpdate
             this.AppcastUrl = appcastUrl;
             this.UpdaterOptions = updaterOptions;
 
-            if (this.IsUpdaterRunning && this._remindLaterTimer == null)
+            if (!this.IsUpdaterRunning && this._remindLaterTimer == null)
             {
                 this.IsUpdaterRunning = true;
 
-                this.IsWinFormsApplication = System.Windows.Forms.Application.MessageLoop;
+                this.IsWinFormsApplication = System.Windows.Application.Current == null;
+
                 ResourceEnabler.SetLanguageDictionary();
             }
 
@@ -300,16 +301,25 @@ namespace Prakrishta.EasyUpdate
                     }
                     else
                     {
-                        System.Windows.MessageBox.Show(ResourceEnabler.GetResourceText("UpdateUnavailableMessage"),
+                        if(this.UpdaterOptions.ReportErrors)
+                        {
+                            ActionInvokeEnabler.InvokeIfNecessary(() =>
+                                    System.Windows.MessageBox.Show(ResourceEnabler.GetResourceText("UpdateUnavailableMessage"),
                                     ResourceEnabler.GetResourceText("UpdateUnavailableCaption"),
-                                    MessageBoxButton.OK, MessageBoxImage.Information);
+                                    MessageBoxButton.OK, MessageBoxImage.Information));
+                        }
+                        
                     }
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show(ResourceEnabler.GetResourceText("UpdateCheckFailedMessage"),
-                                   ResourceEnabler.GetResourceText("UpdateCheckFailedCaption"),
-                                   MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (this.UpdaterOptions.ReportErrors)
+                    {
+                        ActionInvokeEnabler.InvokeIfNecessary(() =>
+                            System.Windows.MessageBox.Show(ResourceEnabler.GetResourceText("UpdateCheckFailedMessage"),
+                            ResourceEnabler.GetResourceText("UpdateCheckFailedCaption"),
+                            MessageBoxButton.OK, MessageBoxImage.Information));
+                    }
                 }
             }
 

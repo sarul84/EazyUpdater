@@ -58,6 +58,8 @@
     <Compile Include="Controls\EasyUpdaterWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Enabler\ActionInvokeEnabler.cs" />
+    <Compile Include="Enabler\BamlReader.cs" />
     <Compile Include="Enabler\RegistryKeys.cs" />
     <Compile Include="Enabler\ResourceEnabler.cs" />
     <Compile Include="Enums\BrowserEmulationVersion.cs" />

@@ -183,6 +183,7 @@ namespace Prakrishta.EasyUpdate
                 processStartInfo = new ProcessStartInfo
                 {
                     FileName = "msiexec",
+                    UseShellExecute = false,
                     Arguments = $"/i \"{tempPath}\""
                 };
             }
@@ -283,7 +284,7 @@ namespace Prakrishta.EasyUpdate
         /// <returns>File name</returns>
         private static string TryToFindFileName(string contentDisposition, string lookForFileName)
         {
-            string fileName = String.Empty;
+            string fileName = string.Empty;
             if (!string.IsNullOrEmpty(contentDisposition))
             {
                 var index = contentDisposition.IndexOf(lookForFileName, StringComparison.CurrentCultureIgnoreCase);
@@ -322,13 +323,20 @@ namespace Prakrishta.EasyUpdate
 
                         if (fileChecksum == checksum.ToLower()) return true;
 
-                        MessageBox.Show(ResourceEnabler.GetResourceText("FileIntegrityCheckFailedMessage"),
-                            ResourceEnabler.GetResourceText("FileIntegrityCheckFailedCaption"), MessageBoxButton.OK, MessageBoxImage.Error);
+                        ActionInvokeEnabler.InvokeIfNecessary(() =>
+                            MessageBox.Show(ResourceEnabler.GetResourceText("FileIntegrityCheckFailedMessage"),
+                            ResourceEnabler.GetResourceText("FileIntegrityCheckFailedCaption"), 
+                            MessageBoxButton.OK, MessageBoxImage.Error));
                     }
                     else
                     {
-                        MessageBox.Show(ResourceEnabler.GetResourceText("UnsupportedHashAlgorithmMessage"),
-                               ResourceEnabler.GetResourceText("UnsupportedHashAlgorithmCaption"), MessageBoxButton.OK, MessageBoxImage.Error);
+                        if (this._eazyUpdate.UpdaterOptions.ReportErrors)
+                        {
+                            ActionInvokeEnabler.InvokeIfNecessary(() =>
+                                MessageBox.Show(ResourceEnabler.GetResourceText("UnsupportedHashAlgorithmMessage"),
+                                ResourceEnabler.GetResourceText("UnsupportedHashAlgorithmCaption"),
+                                MessageBoxButton.OK, MessageBoxImage.Error));
+                        }
                     }
 
                     return false;

@@ -45,7 +45,7 @@ namespace Prakrishta.EasyUpdate.Sample
         {
             var update = new UpdaterInformation
             {
-                CurrentVersion = new Version("2.0.0.0"),
+                CurrentVersion = new Version("1.0.0.0"),
                 DownloadURL = "http://rbsoft.org/downloads/AutoUpdaterTestWPF.zip",
                 ChangelogURL = "https://github.com/ravibpatel/AutoUpdater.NET/releases",
                 UpdateMode = EazyUpdateMode.Normal
